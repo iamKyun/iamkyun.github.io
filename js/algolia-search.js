@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     indexName,
     searchClient  : algoliasearch(appID, apiKey),
     searchFunction: helper => {
-      if (input && input.value) {
+      if (input.value) {
         helper.search();
       }
     }

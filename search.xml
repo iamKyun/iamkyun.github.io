@@ -1,68 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Flowable在SpringBoot环境下自定义身份管理服务</title>
-    <url>/2020/07/28/Custom-Identity-Service-in-Flowable-with-Spring-Boot/</url>
-    <content><![CDATA[<blockquote>
-<p>实现方式参考<a href="https://flowable.com/open-source/docs/bpmn/ch18-Advanced/#custom-identity-management-by-overriding-standard-sessionfactory" target="_blank" rel="noopener">官方配置文档</a>和<a href="https://flowable.com/open-source/docs/bpmn/ch17-Ldap/" target="_blank" rel="noopener">官方LDAP实现</a></p>
-</blockquote>
-<h4 id="实现代码"><a class="header-anchor" href="#实现代码"></a>实现代码</h4>
-<ol>
-<li>
-<p>实现接口：<code>org.flowable.idm.api.IdmIdentityService</code>，根据需求实现里面的查询器和查询方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里直接继承了它的默认实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomIdmIdentityServiceImpl</span> <span class="keyword">extends</span> <span class="title">IdmIdentityServiceImpl</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserQuery <span class="title">createUserQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 自定义的用户查询器实现</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CustomUserQueryImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>用Spring Bean的方式配置一个属于<code>SpringIdmEngineConfiguration</code>的引擎配置器，在配置器里设置<code>IdmIdentityService</code>的自定义实现</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> EngineConfigurationConfigurer&lt;SpringIdmEngineConfiguration&gt; <span class="title">idmEngineConfigurationConfigurer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> idmEngineConfiguration -&gt; idmEngineConfiguration.setIdmIdentityService(</span><br><span class="line">	<span class="keyword">new</span> CustomIdmIdentityServiceImpl());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>测试</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span>(classes = ExampleApplication<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">ExampleApplicationTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IdentityService identityService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="meta">@FormDeploymentAnnotation</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">identityServiceTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 查询方法最终调用了 CustomUserQueryImpl,里面的测试数据有3个用户，对应ID:["1","2","3"]</span></span><br><span class="line">        <span class="keyword">long</span> result1 = identityService.createUserQuery().userId(<span class="string">"1"</span>).count();</span><br><span class="line">        <span class="keyword">long</span> result2 = identityService.createUserQuery().userId(<span class="string">"4"</span>).count();</span><br><span class="line">        <span class="keyword">long</span> result3 = identityService.createUserQuery().userIds(Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"4"</span>)).count();</span><br><span class="line">        Assertions.assertEquals(<span class="number">1</span>, result1);</span><br><span class="line">        Assertions.assertEquals(<span class="number">0</span>, result2);</span><br><span class="line">        Assertions.assertEquals(<span class="number">2</span>, result3);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="源码解析"><a class="header-anchor" href="#源码解析"></a>源码解析</h4>
-<p>在<code>org.flowable.engine.IdentityService</code>执行查询的方法中，是代理给<code>org.flowable.idm.api.IdmIdentityService</code>去执行。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/1.png" alt="图1"></p>
-<p>此接口的实现只有1个<code>org.flowable.idm.engine.impl.IdmIdentityServiceImpl</code></p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/2.png" alt="图2"></p>
-<p>查找调用处可以发现只有1处新建该类的对象 （org.flowable.idm.engine.IdmEngineConfiguration:100），所以最终的目的是：更改<code>IdmEngineConfiguration</code>的成员变量：<code>idmIdentityService</code>，让其变成我们自定义的IdmIdentityService (此处指上文的<code>CustomIdmIdentityServiceImpl</code>)。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/3.png" alt="图3"></p>
-<p>现在所处在的类是<code>org.flowable.idm.engine.IdmEngineConfiguration</code>，它是Flowable的IDM引擎配置类，在Spring环境下该类有一个子类名为：<code>org.flowable.idm.spring.SpringIdmEngineConfiguration</code>，而引入了<code>flowable-spring-boot-starter</code>之后，在SpringBoot的环境下，自动配置生效。使得<code>SpringIdmEngineConfiguration</code>自动成为一个Spring Bean。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/4.png" alt="图4"></p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/4-1.png" alt="4-1"></p>
-<p>所以此时已经有一个方法了，只要改变此<code>SpringIdmEngineConfiguration</code> Bean的IdmIdentityService就可以替换IDM引擎。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/4-2.png" alt="4-2"></p>
-<p>这样也能达到目的，但是配置过于冗余，基本上是复制了一整段代码。</p>
-<p>参考官方LDAP自动配置的实现，可以发现它只用一个Bean就完成了IdmIdentityService的替换，就是文章中一开始所展示的实现方式。</p>
-<p>这种实现方式是怎么生效的呢？其中关键接口是<code>org.flowable.spring.boot.EngineConfigurationConfigurer</code></p>
-<p>由它的注释可以看到：</p>
-<blockquote>
-<p>Interface to be implemented by a bean that does some extra configuration of a Flowable engines. If such a bean is defined, it will be called when the specific engine configuration is created and the default values have been set.</p>
-</blockquote>
-<p>在Flowable引擎创建并设置好默认值时，这个接口是实现类会用来为这些Flowable引擎做一些额外的配置工作。</p>
-<p>这个接口与IDM引擎关联的代码是在：org.flowable.spring.boot.idm.IdmEngineAutoConfiguration.IdmEngineAppConfiguration#idmEngineConfigurator</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/5.png" alt="图5"></p>
-<p>当<code>SpringIdmEngineConfiguration</code> 准备好时，它会调用<code>invokeConfigurars()</code>方法，让属于<code>SpringIdmEngineConfiguration</code>的配置器来为<code>SpringIdmEngineConfiguration</code>做一些额外的配置。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/6.png" alt="图6"></p>
-<p>最后，就调用到了我们文中一开始所定义的配置器Bean，让我们自定义的IDM服务生效。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200728/7.png" alt="图7"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>Flowable</category>
-      </categories>
-      <tags>
-        <tag>Flowable</tag>
-        <tag>SpringBoot</tag>
-        <tag>Java</tag>
-        <tag>指南</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>在Windows 10 WSL2中使用图形界面（GUI）</title>
     <url>/2020/07/25/WSL2-Ubuntu-GUI/</url>
-    <content><![CDATA[<p><img src="http://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/1.jpg?imageMogr2/auto-orient/thumbnail/x256/blur/1x0/quality/80" alt="WSL"></p>
+    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/1.jpg?imageMogr2/auto-orient/thumbnail/x256/blur/1x0/quality/80" alt="WSL"></p>
 <h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
 <p>​		微软正在计划让WSL2支持基于RDP的GUI<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，虽然这一特性目前还不可用，但我们还是能通过别的一些手段来达到目的。</p>
 <h4 id="准备环境"><a class="header-anchor" href="#准备环境"></a>准备环境</h4>
@@ -93,18 +34,18 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/xrdp/startwm.sh</span><br></pre></td></tr></table></figure>
 <p>​		把文件的最后几行改成这样：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> -x /etc/X11/Xsession &amp;&amp; <span class="built_in">exec</span> /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">exec</span> /bin/sh /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> xfce</span></span><br><span class="line">startxfce4</span><br></pre></td></tr></table></figure>
-<p><img src="http://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/2.png?imageMogr2/auto-orient/thumbnail/!75p/blur/1x0/quality/80" alt="code"></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/2.png?imageMogr2/auto-orient/thumbnail/!75p/blur/1x0/quality/80" alt="code"></p>
 <ol start="4">
 <li>最后，启动<code>XDRP</code></li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/xrdp start</span><br></pre></td></tr></table></figure>
 <h4 id="开始使用"><a class="header-anchor" href="#开始使用"></a>开始使用</h4>
 <p>使用Windows的远程桌面连接，通过WSL的IP地址<code>:3389</code>，<code>3389</code>为默认端口，可以在配置<code>/etc/xrdp/xrdp.ini</code>中更改。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/3.png" alt="Windows远程桌面连接"></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/3.png" alt="Windows远程桌面连接"></p>
 <p>用WSL的用户名和密码登录进系统</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/4.png" alt="登陆界面"></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/4.png" alt="登陆界面"></p>
 <p>完成，最后成品：</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/5.png?imageMogr2/auto-orient/thumbnail/!50p/blur/1x0/quality/80" alt="Ubuntu桌面"></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/5.png?imageMogr2/auto-orient/thumbnail/!50p/blur/1x0/quality/80" alt="Ubuntu桌面"></p>
 <h4 id="后言"><a class="header-anchor" href="#后言"></a>后言</h4>
 <p>​		此文章所使用的方法是通过一些手段来让WSL2支持GUI，所以在使用的过程中略有繁琐和有一些不太完美的地方。相信之后微软推出的WSL2 GUI特性将会很好地支持这方面的使用。想要持续关注这一方面的信息，可以到<a href="https://devblogs.microsoft.com/commandline/" target="_blank" rel="noopener">微软的开发者博客</a>上关注这方面的内容。</p>
 <hr class="footnotes-sep">
@@ -124,10 +65,69 @@
         <category>Windows</category>
       </categories>
       <tags>
-        <tag>指南</tag>
         <tag>WSL</tag>
         <tag>Windows</tag>
         <tag>Linux</tag>
+        <tag>指南</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Flowable在SpringBoot环境下自定义身份管理服务</title>
+    <url>/2020/07/28/Custom-Identity-Service-in-Flowable-with-Spring-Boot/</url>
+    <content><![CDATA[<blockquote>
+<p>实现方式参考<a href="https://flowable.com/open-source/docs/bpmn/ch18-Advanced/#custom-identity-management-by-overriding-standard-sessionfactory" target="_blank" rel="noopener">官方配置文档</a>和<a href="https://flowable.com/open-source/docs/bpmn/ch17-Ldap/" target="_blank" rel="noopener">官方LDAP实现</a></p>
+</blockquote>
+<h4 id="实现代码"><a class="header-anchor" href="#实现代码"></a>实现代码</h4>
+<ol>
+<li>
+<p>实现接口：<code>org.flowable.idm.api.IdmIdentityService</code>，根据需求实现里面的查询器和查询方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这里直接继承了它的默认实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomIdmIdentityServiceImpl</span> <span class="keyword">extends</span> <span class="title">IdmIdentityServiceImpl</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserQuery <span class="title">createUserQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 自定义的用户查询器实现</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CustomUserQueryImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>用Spring Bean的方式配置一个属于<code>SpringIdmEngineConfiguration</code>的引擎配置器，在配置器里设置<code>IdmIdentityService</code>的自定义实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> EngineConfigurationConfigurer&lt;SpringIdmEngineConfiguration&gt; <span class="title">idmEngineConfigurationConfigurer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> idmEngineConfiguration -&gt; idmEngineConfiguration.setIdmIdentityService(</span><br><span class="line">	<span class="keyword">new</span> CustomIdmIdentityServiceImpl());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>测试</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span>(classes = ExampleApplication<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">ExampleApplicationTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IdentityService identityService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="meta">@FormDeploymentAnnotation</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">identityServiceTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 查询方法最终调用了 CustomUserQueryImpl,里面的测试数据有3个用户，对应ID:["1","2","3"]</span></span><br><span class="line">        <span class="keyword">long</span> result1 = identityService.createUserQuery().userId(<span class="string">"1"</span>).count();</span><br><span class="line">        <span class="keyword">long</span> result2 = identityService.createUserQuery().userId(<span class="string">"4"</span>).count();</span><br><span class="line">        <span class="keyword">long</span> result3 = identityService.createUserQuery().userIds(Arrays.asList(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"4"</span>)).count();</span><br><span class="line">        Assertions.assertEquals(<span class="number">1</span>, result1);</span><br><span class="line">        Assertions.assertEquals(<span class="number">0</span>, result2);</span><br><span class="line">        Assertions.assertEquals(<span class="number">2</span>, result3);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="源码解析"><a class="header-anchor" href="#源码解析"></a>源码解析</h4>
+<p>在<code>org.flowable.engine.IdentityService</code>执行查询的方法中，是代理给<code>org.flowable.idm.api.IdmIdentityService</code>去执行。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/1.png" alt="图1"></p>
+<p>此接口的实现只有1个<code>org.flowable.idm.engine.impl.IdmIdentityServiceImpl</code></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/2.png" alt="图2"></p>
+<p>查找调用处可以发现只有1处新建该类的对象 （org.flowable.idm.engine.IdmEngineConfiguration:100），所以最终的目的是：更改<code>IdmEngineConfiguration</code>的成员变量：<code>idmIdentityService</code>，让其变成我们自定义的IdmIdentityService (此处指上文的<code>CustomIdmIdentityServiceImpl</code>)。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/3.png" alt="图3"></p>
+<p>现在所处在的类是<code>org.flowable.idm.engine.IdmEngineConfiguration</code>，它是Flowable的IDM引擎配置类，在Spring环境下该类有一个子类名为：<code>org.flowable.idm.spring.SpringIdmEngineConfiguration</code>，而引入了<code>flowable-spring-boot-starter</code>之后，在SpringBoot的环境下，自动配置生效。使得<code>SpringIdmEngineConfiguration</code>自动成为一个Spring Bean。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/4.png" alt="图4"></p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/4-1.png" alt="4-1"></p>
+<p>所以此时已经有一个方法了，只要改变此<code>SpringIdmEngineConfiguration</code> Bean的IdmIdentityService就可以替换IDM引擎。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/4-2.png" alt="4-2"></p>
+<p>这样也能达到目的，但是配置过于冗余，基本上是复制了一整段代码。</p>
+<p>参考官方LDAP自动配置的实现，可以发现它只用一个Bean就完成了IdmIdentityService的替换，就是文章中一开始所展示的实现方式。</p>
+<p>这种实现方式是怎么生效的呢？其中关键接口是<code>org.flowable.spring.boot.EngineConfigurationConfigurer</code></p>
+<p>由它的注释可以看到：</p>
+<blockquote>
+<p>Interface to be implemented by a bean that does some extra configuration of a Flowable engines. If such a bean is defined, it will be called when the specific engine configuration is created and the default values have been set.</p>
+</blockquote>
+<p>在Flowable引擎创建并设置好默认值时，这个接口是实现类会用来为这些Flowable引擎做一些额外的配置工作。</p>
+<p>这个接口与IDM引擎关联的代码是在：org.flowable.spring.boot.idm.IdmEngineAutoConfiguration.IdmEngineAppConfiguration#idmEngineConfigurator</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/5.png" alt="图5"></p>
+<p>当<code>SpringIdmEngineConfiguration</code> 准备好时，它会调用<code>invokeConfigurars()</code>方法，让属于<code>SpringIdmEngineConfiguration</code>的配置器来为<code>SpringIdmEngineConfiguration</code>做一些额外的配置。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/6.png" alt="图6"></p>
+<p>最后，就调用到了我们文中一开始所定义的配置器Bean，让我们自定义的IDM服务生效。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/20200728/7.png" alt="图7"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>Flowable</category>
+      </categories>
+      <tags>
+        <tag>指南</tag>
+        <tag>Flowable</tag>
+        <tag>SpringBoot</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
 </search>

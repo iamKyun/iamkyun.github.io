@@ -1,127 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>什么是视频格式（Video Format）、编码解码器（Codec）和封装格式/容器（Container）</title>
-    <url>/2020/08/16/Video-Formats-Codecs-and-Containers-Explained/</url>
-    <content><![CDATA[<h3 id="前言"><a class="header-anchor" href="#前言"></a>前言</h3>
-<blockquote>
-<p>文章由 <a href="https://www.iamkyun.com">https://www.iamkyun.com</a> 翻译以下视频而成： <a href="https://www.youtube.com/watch?v=XvoW-bwIeyY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=XvoW-bwIeyY</a></p>
-</blockquote>
-<p>自数码视频在1988年问世，为了提升视频质量、减少文件大小和改善视频播放质量，几乎每年都会开发出新的视频格式 。视频的受欢迎程度持续快速增长，78%的人每天都会至少观看一个视频。然而，大多数人都不清楚视频播放背后的机理到底是怎样的。</p>
-<p>以下内容将会告诉你关于视频的一些基础知识，和怎么利用它们达到你的目的。</p>
-<p>接下来，你将会学习到：</p>
-<ul>
-<li><strong>编码解码器</strong>（Codec）</li>
-<li><strong>视频格式</strong>（Video Format）</li>
-<li><strong>封装格式</strong>/<strong>容器</strong>（Container）</li>
-</ul>
-<blockquote>
-<p>剧透一下：Video Format &amp; Container 同义。</p>
-</blockquote>
-<p>在一般人的认知中，存在这一个常见的误区，那就是认为视频文件的<strong>后缀名</strong>就是视频的格式，但事实并不是那样的。</p>
-<p>某些视频格式可能由一堆文件，文件夹，甚至播放列表组成，它们都是视频能够正常播放的必要元素。为了更清楚地了解视频格式，我们拿具体的一个视频文件来举例，来弄懂视频的各部分是怎样一起工作，让画面呈现在你的显示器上的。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/1.png" alt="1.png"></p>
-<p>视频文件的后缀实际上含义是“<strong>封装格式/容器</strong>（Container，后文称容器）”，容器里面包含了视频播放所需的各种文件，这些文件包括：</p>
-<ul>
-<li><strong>视频流</strong>（Video Stream）</li>
-<li><strong>音频流</strong>（Audio Stream）</li>
-<li><strong>元数据</strong>（Meta Data）</li>
-</ul>
-<p>视频流功能是告诉播放器，应该显示出什么样的画面。音频流的功能是告诉播放器，在视频播放过程中应该发出什么样的声音。元数据，也称为“描述数据的数据”，它里面包含了视频的信息，例如码率、分辨率、字幕、设备信息和制作时间等一些内容。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/2.png" alt="2.png"></p>
-<p>其中，元数据里面最重要的一部分就是<strong>编码解码器</strong>（<strong>Codec</strong>，下文称Codec），如果你接触过一些视频相关的工作，那么你可能已经接触过它。</p>
-<h3 id="Codec（编码解码器）"><a class="header-anchor" href="#Codec（编码解码器）"></a>Codec（编码解码器）</h3>
-<p>Codec是一个复合单词，由<strong>Co</strong>der和<strong>Dec</strong>oder组成。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/3.png" alt="3.png"></p>
-<p>Codec，顾名思义，它用来编码和解码视频、音频的。编码，也就是视频编辑工作中常说的“压制”，目的是让视频的体积减小，易于管理；解码，就是播放器或其他目标软件根据Codec里设定好的解码规则，经过解码器后，把被压缩的视频还原成和*原来质量相近（有损和无损压缩）*的视频，随后呈现到显示其中。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/4.png" alt="4.png"></p>
-<p>像视频格式一样，Codec也有很多种。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/5.png" alt="5.png"></p>
-<p>我们拿几种流行的Codec，来了解一些它们的优势和劣势。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/6.png" alt="6.png"></p>
-<h3 id="视频Codec"><a class="header-anchor" href="#视频Codec"></a>视频Codec</h3>
-<h4 id="H-264"><a class="header-anchor" href="#H-264"></a>H.264</h4>
-<p>我们先看看<strong>H.264</strong>，也称Advanced Video Coding（<strong>AVC</strong>），H.264是目前为止使用得最普遍Codec，因为在相同文件大小情况下，它在码率方便做得比它的前代<strong>H.263</strong>更好，也是因为这样，H.264被广泛支持，在使用它的时候，你也不用怕遇到了问题而找不到解决方法。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/7.png" alt="7.png"></p>
-<h4 id="H-265"><a class="header-anchor" href="#H-265"></a>H.265</h4>
-<p>H.264的下一代，<strong>H.265</strong>，也称High Efficiency Video Coding（<strong>HEVC</strong>），和它的名字一样，H.265的压缩率几乎是H.264的两倍，这意味着，用HEVC编码和用AVC编码的质量相同的一个视频，前者的的文件大小能比后者少一半，这也对2k以上的<strong>高分辨率视频</strong>来说是个好消息。但是如果用HEVC编码视频，要求也比一般的Codec高，几乎需消耗<em>3倍</em>的资源。</p>
-<p>就像H.264一样，H.265是一个私有的Codec，在使用上是需要授权的。虽然HEVC在一直成长，但是到目前为止还不如它的前代流行。苹果公司在HEVC的支持上表也现得很活跃。但随着其他新的Codec被推出，HEVC的是否还具备优势也成了一个疑问。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/8.png" alt="8.png"></p>
-<h4 id="VP9"><a class="header-anchor" href="#VP9"></a>VP9</h4>
-<p><strong>VP9</strong>是一个由Google开发的开放格式、无需授权费的Codec。起初这个Codec是用在<em>YouTube</em>上的，像H.265一样，VP9的压缩率也能达到它的前代VP8的<em>两倍</em>，对<strong>高分辨率视频</strong>友好，但是在编码方面的环境要求颇高，支持度也没H.264广泛。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/9.png" alt="9.png"></p>
-<p>但是，VP9背后的技术通常使得流的一致性和可靠性提高，而H.265通常能提供更好的图像质量。同样重要的是，VP9通常使用<strong>WebM</strong>或<strong>IVF</strong>容器，这里就不展开讲这两个容器了。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/10.png" alt="10.png"></p>
-<h4 id="AV1"><a class="header-anchor" href="#AV1"></a>AV1</h4>
-<p>另一个开放、免授权的Codec，<strong>AV1</strong>（AOMedia Video 1），它<em>开放媒体联盟</em>开发，但现阶段还处于发展期，正逐渐被各大平台支持。</p>
-<h3 id="音频Codec"><a class="header-anchor" href="#音频Codec"></a>音频Codec</h3>
-<p>上面介绍的一些常见的视频Codec，但音频Codec又是另一回事了，而且它对视频也非常重要。让我们介绍一下一些常用的音频Codec，让你在使用中可以决定用哪个Codec来帮助你完成工作。</p>
-<h4 id="MP3"><a class="header-anchor" href="#MP3"></a>MP3</h4>
-<p>最著名的音频Codec要数<strong>MP3</strong>莫属了，它由动态影像专家小组（<strong>M</strong>oving <strong>P</strong>icture <strong>E</strong>xperts <strong>G</strong>roup，简称<strong>MPEG</strong>)在1993年开发出来。这种<em>有损的</em>Codec利用了人类的听力局限性（听觉掩蔽），从而达到即使有损，也对听觉体验不打折扣的目的。例如，MP3通常压制码率为128kbs，听起来就和CD播放器一样，但是文件大小只有CD的9%。现在，MP3已成为最流行的音频格式，但是，它在视频的应用上也有它功能局限性。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/11.png" alt="11.png"></p>
-<h4 id="AAC"><a class="header-anchor" href="#AAC"></a>AAC</h4>
-<p>近些年，也有不少的音频Codec正发展起来。 例如，<strong>AAC</strong>（Advanced Audio Coding），是MP3出来不久后，就开发的音频专有Codec。AAC的主要好处就是有广泛的平台支持并且在相同的码率下的音频质量也比MP3<strong>更高</strong>，这使得AAC成为了视频中最流行的音频Codec。但是，AAC在<strong>音频通道</strong>（Audio Channels）中存在局限性，这意味着，如果我们想要得到一个更好的播放体验，就需要另外的Codec来支持了。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/12.png" alt="12.png"></p>
-<h4 id="AC3"><a class="header-anchor" href="#AC3"></a>AC3</h4>
-<p>如果你需要<strong>环绕声</strong>或对Dolby产品向后兼容，<strong>AC3</strong>（Dolby Digital Audio Codec 3）是一个选择，因为它对音频通道有完整支持，但是对于DVD播放器或数字电视，AC3的支持度就不是那么好了。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/13.png" alt="13.png"></p>
-<h3 id="Codec总览"><a class="header-anchor" href="#Codec总览"></a>Codec总览</h3>
-<p>尽管还有其他的一些音频、视频Codec，但以上介绍的已经是最常见最重要的了。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/14.png" alt="14.png"></p>
-<h3 id="Video-Format-Container-（视频格式-容器）"><a class="header-anchor" href="#Video-Format-Container-（视频格式-容器）"></a>Video Format &amp; Container （视频格式&amp;容器）</h3>
-<p>知道了一些基础知识后，我们终于可以说一说视频文件格式（Video File Format）了。视频文件格式是一个标准化规则，用于存储视频文件的容器、Codec、元数据，有时甚至是文件夹结构，因此不同的设备和播放器才能轻松地支持它们。</p>
-<p>自从第一个视频格式变得流行，几乎每年都会开发出新的视频格式，意图改善图像的质量、优化文件大小、提高播放质量和提供一些额外的特性。</p>
-<p>当一个大平台决定在它产品中支持一个视频格式时，这个视频格式就会变得流行，通常是因为取得了一些技术突破或特殊用途。这常常会形成自我促进的循环：大平台的支持使创作者会用这个视频格式生产出更多内容，而其他平台看见有如此多与这个视频格式相关的内容后，也逐渐开始支持对这个视频格式。</p>
-<p>在以下文章中，我们将会告诉你那些视频格式是最流行的和怎样选择它们。</p>
-<p>首先，不同的视频格式在<strong>视频编辑</strong>和<strong>网络内容分发</strong>上的流行程度都不一样。这是因为视频编辑通常需要<strong>更高质量</strong>的文件，而网络内容分发更注重<strong>更小文件体积</strong>和<strong>更流畅的播放体验</strong>。而在本文中，更侧重在<strong>网络内容分发</strong>上。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/15.png" alt="15.png"></p>
-<h4 id="MP4"><a class="header-anchor" href="#MP4"></a>MP4</h4>
-<p>我们第一个要说的格式是<strong>MP4</strong>，更具体应该指<strong>MPEG-4</strong>，更更具体应该称<strong>MPEG-4第14部分</strong>。因为MPEG-4这个名称很容易私人迷惑，因为不同的人叫MPEG-4时，所指的含义可能会不一样。常见的3种含义分别是：</p>
-<ul>
-<li>
-<p><strong>MP4 容器</strong>（MPEG-4第14部分，我们正在讨论的是这个）</p>
-</li>
-<li>
-<p><strong>ISO Base Media File</strong>（MPEG-4第12部分，在视频流上用到）</p>
-</li>
-<li>
-<p><strong>H.264 Codec</strong>（MPEG-4第10部分，在视频压制上用到）</p>
-</li>
-</ul>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/16.png" alt="16.png"></p>
-<p>本文主要讨论的是<strong>视频格式</strong>，也就是上述<strong>第1种</strong>意思的同义。</p>
-<p>MP4是一种对于<strong>Web程序输出视频友好</strong>的容器，因为它存在单独的一个容器中并且得到各种各样的设备和操作系统支持。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/17.png" alt="17.png"></p>
-<h4 id="HLS"><a class="header-anchor" href="#HLS"></a>HLS</h4>
-<p>由于用户互联网网速的不可预测性和对直播的需求增加，近年来，一种叫“<strong>自适应码率片段</strong>（Adaptive Bitrate Segmentation）”的新视频技术正逐渐流行。</p>
-<p><strong>自适应码率</strong>（ABR）的工作原理是把视频流转换为不同的分辨率，并用不同的码率来分割成一堆小片段。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/18.png" alt="18.png"></p>
-<p>这些小片段能在用户不同网络状况下进行互相替换，达到流畅的播放体验的目的。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/19.png" alt="19.png"></p>
-<p>2009年，苹果公司开发出了<strong>HLS</strong>（HTTP Live Streaming），这个视频格式建立在自适应码率上，通过HTTP分发，并且广泛兼容多种设备和防火墙，很快就成为最流行的一种视频格式。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/20.png" alt="20.png"></p>
-<p>不像MP4，HLS其中最重要的一个文件是<strong>h3u8播放列表</strong>，作用是把各个视频片段组成一个完整的视频，其文件后缀名也是“<strong>.m3u8</strong>”。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/21.png" alt="21.png"></p>
-<h4 id="MPEG-DASH"><a class="header-anchor" href="#MPEG-DASH"></a>MPEG-DASH</h4>
-<p><strong>MPEG-DASH</strong>是另一个自适应码率的格式，由<strong>动态影像专家小组</strong>（MPEG）开发，和HLS类似，也是采用HTTP协议，其中不同的是，DASH是一个开源格式，并且它是国际标准，也是第一个具有国际标准的自适应流。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/22.png" alt="22.png"></p>
-<p>虽然HLS现在还是非常流行，但是DASH毫无意外地会很快赶上，因为它是无需授权费的。</p>
-<h3 id="完"><a class="header-anchor" href="#完"></a>完</h3>
-<p>以上就是全部内容，介绍了几种重要的视频格式/容器、视频Codec、音频Codec。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/23.png" alt="23.png"></p>
-<p>最后，附上在SDR、HDR下，不同分辨率和帧率的<strong>视频码率</strong>推荐。</p>
-<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/24.png" alt="24.png"></p>
-]]></content>
-      <categories>
-        <category>Streaming Media</category>
-      </categories>
-      <tags>
-        <tag>streaming media</tag>
-        <tag>流媒体</tag>
-        <tag>音视频开发</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Flowable在SpringBoot环境下自定义身份管理服务</title>
     <url>/2020/07/28/Custom-Identity-Service-in-Flowable-with-Spring-Boot/</url>
     <content><![CDATA[<blockquote>
@@ -249,6 +128,127 @@
         <tag>WSL</tag>
         <tag>Windows</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是视频格式（Video Format）、编码解码器（Codec）和封装格式/容器（Container）</title>
+    <url>/2020/08/16/Video-Formats-Codecs-and-Containers-Explained/</url>
+    <content><![CDATA[<h3 id="前言"><a class="header-anchor" href="#前言"></a>前言</h3>
+<blockquote>
+<p>文章由 <a href="https://www.iamkyun.com">https://www.iamkyun.com</a> 翻译以下视频而成： <a href="https://www.youtube.com/watch?v=XvoW-bwIeyY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=XvoW-bwIeyY</a></p>
+</blockquote>
+<p>自数码视频在1988年问世，为了提升视频质量、减少文件大小和改善视频播放质量，几乎每年都会开发出新的视频格式 。视频的受欢迎程度持续快速增长，78%的人每天都会至少观看一个视频。然而，大多数人都不清楚视频播放背后的机理到底是怎样的。</p>
+<p>以下内容将会告诉你关于视频的一些基础知识，和怎么利用它们达到你的目的。</p>
+<p>接下来，你将会学习到：</p>
+<ul>
+<li><strong>编码解码器</strong>（Codec）</li>
+<li><strong>视频格式</strong>（Video Format）</li>
+<li><strong>封装格式</strong>/<strong>容器</strong>（Container）</li>
+</ul>
+<blockquote>
+<p>剧透一下：Video Format &amp; Container 同义。</p>
+</blockquote>
+<p>在一般人的认知中，存在这一个常见的误区，那就是认为视频文件的<strong>后缀名</strong>就是视频的格式，但事实并不是那样的。</p>
+<p>某些视频格式可能由一堆文件，文件夹，甚至播放列表组成，它们都是视频能够正常播放的必要元素。为了更清楚地了解视频格式，我们拿具体的一个视频文件来举例，来弄懂视频的各部分是怎样一起工作，让画面呈现在你的显示器上的。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/1.png" alt="1.png"></p>
+<p>视频文件的后缀实际上含义是“<strong>封装格式/容器</strong>（Container，后文称容器）”，容器里面包含了视频播放所需的各种文件，这些文件包括：</p>
+<ul>
+<li><strong>视频流</strong>（Video Stream）</li>
+<li><strong>音频流</strong>（Audio Stream）</li>
+<li><strong>元数据</strong>（Meta Data）</li>
+</ul>
+<p>视频流功能是告诉播放器，应该显示出什么样的画面。音频流的功能是告诉播放器，在视频播放过程中应该发出什么样的声音。元数据，也称为“描述数据的数据”，它里面包含了视频的信息，例如码率、分辨率、字幕、设备信息和制作时间等一些内容。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/2.png" alt="2.png"></p>
+<p>其中，元数据里面最重要的一部分就是<strong>编码解码器</strong>（<strong>Codec</strong>，下文称Codec），如果你接触过一些视频相关的工作，那么你可能已经接触过它。</p>
+<h3 id="Codec（编码解码器）"><a class="header-anchor" href="#Codec（编码解码器）"></a>Codec（编码解码器）</h3>
+<p>Codec是一个复合单词，由<strong>Co</strong>der和<strong>Dec</strong>oder组成。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/3.png" alt="3.png"></p>
+<p>Codec，顾名思义，它用来编码和解码视频、音频的。编码，也就是视频编辑工作中常说的“压制”，目的是让视频的体积减小，易于管理；解码，就是播放器或其他目标软件根据Codec里设定好的解码规则，经过解码器后，把被压缩的视频还原成和*原来质量相近（有损和无损压缩）*的视频，随后呈现到显示其中。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/4.png" alt="4.png"></p>
+<p>像视频格式一样，Codec也有很多种。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/5.png" alt="5.png"></p>
+<p>我们拿几种流行的Codec，来了解一些它们的优势和劣势。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/6.png" alt="6.png"></p>
+<h3 id="视频Codec"><a class="header-anchor" href="#视频Codec"></a>视频Codec</h3>
+<h4 id="H-264"><a class="header-anchor" href="#H-264"></a>H.264</h4>
+<p>我们先看看<strong>H.264</strong>，也称Advanced Video Coding（<strong>AVC</strong>），H.264是目前为止使用得最普遍Codec，因为在相同文件大小情况下，它在码率方便做得比它的前代<strong>H.263</strong>更好，也是因为这样，H.264被广泛支持，在使用它的时候，你也不用怕遇到了问题而找不到解决方法。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/7.png" alt="7.png"></p>
+<h4 id="H-265"><a class="header-anchor" href="#H-265"></a>H.265</h4>
+<p>H.264的下一代，<strong>H.265</strong>，也称High Efficiency Video Coding（<strong>HEVC</strong>），和它的名字一样，H.265的压缩率几乎是H.264的两倍，这意味着，用HEVC编码和用AVC编码的质量相同的一个视频，前者的的文件大小能比后者少一半，这也对2k以上的<strong>高分辨率视频</strong>来说是个好消息。但是如果用HEVC编码视频，要求也比一般的Codec高，几乎需消耗<em>3倍</em>的资源。</p>
+<p>就像H.264一样，H.265是一个私有的Codec，在使用上是需要授权的。虽然HEVC在一直成长，但是到目前为止还不如它的前代流行。苹果公司在HEVC的支持上表也现得很活跃。但随着其他新的Codec被推出，HEVC的是否还具备优势也成了一个疑问。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/8.png" alt="8.png"></p>
+<h4 id="VP9"><a class="header-anchor" href="#VP9"></a>VP9</h4>
+<p><strong>VP9</strong>是一个由Google开发的开放格式、无需授权费的Codec。起初这个Codec是用在<em>YouTube</em>上的，像H.265一样，VP9的压缩率也能达到它的前代VP8的<em>两倍</em>，对<strong>高分辨率视频</strong>友好，但是在编码方面的环境要求颇高，支持度也没H.264广泛。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/9.png" alt="9.png"></p>
+<p>但是，VP9背后的技术通常使得流的一致性和可靠性提高，而H.265通常能提供更好的图像质量。同样重要的是，VP9通常使用<strong>WebM</strong>或<strong>IVF</strong>容器，这里就不展开讲这两个容器了。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/10.png" alt="10.png"></p>
+<h4 id="AV1"><a class="header-anchor" href="#AV1"></a>AV1</h4>
+<p>另一个开放、免授权的Codec，<strong>AV1</strong>（AOMedia Video 1），它<em>开放媒体联盟</em>开发，但现阶段还处于发展期，正逐渐被各大平台支持。</p>
+<h3 id="音频Codec"><a class="header-anchor" href="#音频Codec"></a>音频Codec</h3>
+<p>上面介绍的一些常见的视频Codec，但音频Codec又是另一回事了，而且它对视频也非常重要。让我们介绍一下一些常用的音频Codec，让你在使用中可以决定用哪个Codec来帮助你完成工作。</p>
+<h4 id="MP3"><a class="header-anchor" href="#MP3"></a>MP3</h4>
+<p>最著名的音频Codec要数<strong>MP3</strong>莫属了，它由动态影像专家小组（<strong>M</strong>oving <strong>P</strong>icture <strong>E</strong>xperts <strong>G</strong>roup，简称<strong>MPEG</strong>)在1993年开发出来。这种<em>有损的</em>Codec利用了人类的听力局限性（听觉掩蔽），从而达到即使有损，也对听觉体验不打折扣的目的。例如，MP3通常压制码率为128kbs，听起来就和CD播放器一样，但是文件大小只有CD的9%。现在，MP3已成为最流行的音频格式，但是，它在视频的应用上也有它功能局限性。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/11.png" alt="11.png"></p>
+<h4 id="AAC"><a class="header-anchor" href="#AAC"></a>AAC</h4>
+<p>近些年，也有不少的音频Codec正发展起来。 例如，<strong>AAC</strong>（Advanced Audio Coding），是MP3出来不久后，就开发的音频专有Codec。AAC的主要好处就是有广泛的平台支持并且在相同的码率下的音频质量也比MP3<strong>更高</strong>，这使得AAC成为了视频中最流行的音频Codec。但是，AAC在<strong>音频通道</strong>（Audio Channels）中存在局限性，这意味着，如果我们想要得到一个更好的播放体验，就需要另外的Codec来支持了。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/12.png" alt="12.png"></p>
+<h4 id="AC3"><a class="header-anchor" href="#AC3"></a>AC3</h4>
+<p>如果你需要<strong>环绕声</strong>或对Dolby产品向后兼容，<strong>AC3</strong>（Dolby Digital Audio Codec 3）是一个选择，因为它对音频通道有完整支持，但是对于DVD播放器或数字电视，AC3的支持度就不是那么好了。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/13.png" alt="13.png"></p>
+<h3 id="Codec总览"><a class="header-anchor" href="#Codec总览"></a>Codec总览</h3>
+<p>尽管还有其他的一些音频、视频Codec，但以上介绍的已经是最常见最重要的了。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/14.png" alt="14.png"></p>
+<h3 id="Video-Format-Container-（视频格式-容器）"><a class="header-anchor" href="#Video-Format-Container-（视频格式-容器）"></a>Video Format &amp; Container （视频格式&amp;容器）</h3>
+<p>知道了一些基础知识后，我们终于可以说一说视频文件格式（Video File Format）了。视频文件格式是一个标准化规则，用于存储视频文件的容器、Codec、元数据，有时甚至是文件夹结构，因此不同的设备和播放器才能轻松地支持它们。</p>
+<p>自从第一个视频格式变得流行，几乎每年都会开发出新的视频格式，意图改善图像的质量、优化文件大小、提高播放质量和提供一些额外的特性。</p>
+<p>当一个大平台决定在它产品中支持一个视频格式时，这个视频格式就会变得流行，通常是因为取得了一些技术突破或特殊用途。这常常会形成自我促进的循环：大平台的支持使创作者会用这个视频格式生产出更多内容，而其他平台看见有如此多与这个视频格式相关的内容后，也逐渐开始支持对这个视频格式。</p>
+<p>在以下文章中，我们将会告诉你那些视频格式是最流行的和怎样选择它们。</p>
+<p>首先，不同的视频格式在<strong>视频编辑</strong>和<strong>网络内容分发</strong>上的流行程度都不一样。这是因为视频编辑通常需要<strong>更高质量</strong>的文件，而网络内容分发更注重<strong>更小文件体积</strong>和<strong>更流畅的播放体验</strong>。而在本文中，更侧重在<strong>网络内容分发</strong>上。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/15.png" alt="15.png"></p>
+<h4 id="MP4"><a class="header-anchor" href="#MP4"></a>MP4</h4>
+<p>我们第一个要说的格式是<strong>MP4</strong>，更具体应该指<strong>MPEG-4</strong>，更更具体应该称<strong>MPEG-4第14部分</strong>。因为MPEG-4这个名称很容易私人迷惑，因为不同的人叫MPEG-4时，所指的含义可能会不一样。常见的3种含义分别是：</p>
+<ul>
+<li>
+<p><strong>MP4 容器</strong>（MPEG-4第14部分，我们正在讨论的是这个）</p>
+</li>
+<li>
+<p><strong>ISO Base Media File</strong>（MPEG-4第12部分，在视频流上用到）</p>
+</li>
+<li>
+<p><strong>H.264 Codec</strong>（MPEG-4第10部分，在视频压制上用到）</p>
+</li>
+</ul>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/16.png" alt="16.png"></p>
+<p>本文主要讨论的是<strong>视频格式</strong>，也就是上述<strong>第1种</strong>意思的同义。</p>
+<p>MP4是一种对于<strong>Web程序输出视频友好</strong>的容器，因为它存在单独的一个容器中并且得到各种各样的设备和操作系统支持。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/17.png" alt="17.png"></p>
+<h4 id="HLS"><a class="header-anchor" href="#HLS"></a>HLS</h4>
+<p>由于用户互联网网速的不可预测性和对直播的需求增加，近年来，一种叫“<strong>自适应码率片段</strong>（Adaptive Bitrate Segmentation）”的新视频技术正逐渐流行。</p>
+<p><strong>自适应码率</strong>（ABR）的工作原理是把视频流转换为不同的分辨率，并用不同的码率来分割成一堆小片段。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/18.png" alt="18.png"></p>
+<p>这些小片段能在用户不同网络状况下进行互相替换，达到流畅的播放体验的目的。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/19.png" alt="19.png"></p>
+<p>2009年，苹果公司开发出了<strong>HLS</strong>（HTTP Live Streaming），这个视频格式建立在自适应码率上，通过HTTP分发，并且广泛兼容多种设备和防火墙，很快就成为最流行的一种视频格式。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/20.png" alt="20.png"></p>
+<p>不像MP4，HLS其中最重要的一个文件是<strong>h3u8播放列表</strong>，作用是把各个视频片段组成一个完整的视频，其文件后缀名也是“<strong>.m3u8</strong>”。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/21.png" alt="21.png"></p>
+<h4 id="MPEG-DASH"><a class="header-anchor" href="#MPEG-DASH"></a>MPEG-DASH</h4>
+<p><strong>MPEG-DASH</strong>是另一个自适应码率的格式，由<strong>动态影像专家小组</strong>（MPEG）开发，和HLS类似，也是采用HTTP协议，其中不同的是，DASH是一个开源格式，并且它是国际标准，也是第一个具有国际标准的自适应流。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/22.png" alt="22.png"></p>
+<p>虽然HLS现在还是非常流行，但是DASH毫无意外地会很快赶上，因为它是无需授权费的。</p>
+<h3 id="完"><a class="header-anchor" href="#完"></a>完</h3>
+<p>以上就是全部内容，介绍了几种重要的视频格式/容器、视频Codec、音频Codec。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/23.png" alt="23.png"></p>
+<p>最后，附上在SDR、HDR下，不同分辨率和帧率的<strong>视频码率</strong>推荐。</p>
+<p><img src="http://qiniucdn.iamkyun.com/posts/20200815/24.png" alt="24.png"></p>
+]]></content>
+      <categories>
+        <category>Streaming Media</category>
+      </categories>
+      <tags>
+        <tag>streaming media</tag>
+        <tag>流媒体</tag>
+        <tag>音视频开发</tag>
       </tags>
   </entry>
 </search>

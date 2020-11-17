@@ -5,6 +5,7 @@
     <url>/2020/07/28/Custom-Identity-Service-in-Flowable-with-Spring-Boot/</url>
     <content><![CDATA[<blockquote>
 <p>实现方式参考<a href="https://flowable.com/open-source/docs/bpmn/ch18-Advanced/#custom-identity-management-by-overriding-standard-sessionfactory" target="_blank" rel="noopener">官方配置文档</a>和<a href="https://flowable.com/open-source/docs/bpmn/ch17-Ldap/" target="_blank" rel="noopener">官方LDAP实现</a></p>
+<p>实现源码：<a href="https://github.com/iamKyun/flowable-examples/tree/master/example-1" target="_blank" rel="noopener">https://github.com/iamKyun/flowable-examples/tree/master/example-1</a></p>
 </blockquote>
 <h4 id="实现代码"><a class="header-anchor" href="#实现代码"></a>实现代码</h4>
 <ol start="0">

@@ -64,6 +64,19 @@
       </tags>
   </entry>
   <entry>
+    <title>JVM内存结构</title>
+    <url>/2021/01/29/JVM-Memory-Structure/</url>
+    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/20210722/JVM.svg" alt="JVM.svg"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>2021年1月12日之后，让Flash继续运行</title>
     <url>/2021/01/29/Flash-On/</url>
     <content><![CDATA[<h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
@@ -79,19 +92,6 @@
         <tag>Windows</tag>
         <tag>Flash</tag>
         <tag>Golang</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JVM内存结构</title>
-    <url>/2021/01/29/JVM-Memory-Structure/</url>
-    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/20210722/JVM.svg" alt="JVM.svg"></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>JVM</tag>
       </tags>
   </entry>
   <entry>

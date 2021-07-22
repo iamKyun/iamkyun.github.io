@@ -1,95 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>2021年1月12日之后，让Flash继续运行</title>
-    <url>/2021/01/29/Flash-On/</url>
-    <content><![CDATA[<h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
-<p>​		在2021年1月12日之后，Flash将会无法运行，由于影响到了一些年老的系统的运行，所以要让Flash继续工作，经过一系列搜索，在百度贴吧找到了一个<a href="https://tieba.baidu.com/p/7190317501" target="_blank" rel="noopener">帖子</a>，里面的方法可以让Flash继续工作。但是由于需要用WinHex修改文件，对电脑不熟悉的小白同事有一定难度，故有了写一个小工具的想法。</p>
-<h4 id="代码"><a class="header-anchor" href="#代码"></a>代码</h4>
-<h5 id="Github-https-github-com-iamKyun-flash-on"><a class="header-anchor" href="#Github-https-github-com-iamKyun-flash-on"></a>Github : <a href="https://github.com/iamKyun/flash-on" target="_blank" rel="noopener">https://github.com/iamKyun/flash-on</a></h5>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"os/exec"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 此代码只针对windows系统</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取操作系统位数</span></span><br><span class="line">	bit := <span class="number">32</span> &lt;&lt; (^<span class="keyword">uint</span>(<span class="number">0</span>) &gt;&gt; <span class="number">63</span>)</span><br><span class="line">	<span class="keyword">var</span> filePath <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">if</span> bit == <span class="number">64</span> &#123;</span><br><span class="line">		filePath = <span class="string">"C:\\Windows\\SysWOW64\\Macromed\\Flash\\Flash.ocx"</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		filePath = <span class="string">"C:\\Windows\\System32\\Macromed\\Flash\\Flash.ocx"</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"！！！运行前请关闭浏览器！！！"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%d位操作系统\n"</span>, bit)</span><br><span class="line">	fmt.Printf(<span class="string">"读取文件：%s\n"</span>, filePath)</span><br><span class="line">	content, err := ioutil.ReadFile(filePath)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"读取文件失败，请检查文件是否存在"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	targetBytes := []<span class="keyword">byte</span>&#123;<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x40</span>, <span class="number">0x46</span>, <span class="number">0x3E</span>, <span class="number">0x6F</span>, <span class="number">0x77</span>, <span class="number">0x42</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"开始查找目标代码..."</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Contains(content, targetBytes) &#123;</span><br><span class="line">		fmt.Println(<span class="string">"开始尝试修改..."</span>)</span><br><span class="line">		fmt.Println(<span class="string">"获取文件权限..."</span>)</span><br><span class="line">		c := exec.Command(<span class="string">"cmd"</span>, <span class="string">"/C"</span>, <span class="string">"TAKEOWN"</span>, <span class="string">"/F"</span>, filePath, <span class="string">"/a"</span>)</span><br><span class="line">		<span class="keyword">if</span> err := c.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改文件权限失败，请用管理员权限运行！"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		c2 := exec.Command(<span class="string">"cmd"</span>, <span class="string">"/C"</span>, <span class="string">"ICACLS"</span>, filePath, <span class="string">"/grant"</span>, <span class="string">"Administrators:F"</span>)</span><br><span class="line">		<span class="keyword">if</span> err := c2.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改文件权限失败，请用管理员权限运行！"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		targetIndex := bytes.Index(content, targetBytes)</span><br><span class="line">		modifyIndex := targetIndex + <span class="number">7</span></span><br><span class="line">		content[modifyIndex] = <span class="number">0x72</span></span><br><span class="line">		err := ioutil.WriteFile(filePath, content, os.ModePerm)</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改成功，flash已被激活"</span>)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改失败，原因："</span>)</span><br><span class="line">			fmt.Println(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"找不到目标代码，修改失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Print(<span class="string">"\n按enter键退出..."</span>)</span><br><span class="line">	fmt.Scanln()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>tools</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>Flash</tag>
-        <tag>Golang</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Windows 10 WSL2中使用图形界面（GUI）</title>
-    <url>/2020/07/25/WSL2-Ubuntu-GUI/</url>
-    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/1.jpg?imageMogr2/auto-orient/thumbnail/x256/blur/1x0/quality/80" alt="WSL"></p>
-<h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
-<p>​		微软正在计划让WSL2支持基于RDP的GUI<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，虽然这一特性目前还不可用，但我们还是能通过别的一些手段来达到目的。</p>
-<h4 id="准备环境"><a class="header-anchor" href="#准备环境"></a>准备环境</h4>
-<ul>
-<li>
-<p>Windows 10 （版本：2004）</p>
-</li>
-<li>
-<p>WSL2（Ubuntu 20.04 LTS）（<a href="https://docs.microsoft.com/zh-cn/windows/wsl" target="_blank" rel="noopener">如何安装WSL2?</a>）</p>
-</li>
-</ul>
-<h4 id="安装工具"><a class="header-anchor" href="#安装工具"></a>安装工具</h4>
-<ol>
-<li>先把<code>apt</code> <code>update</code> &amp; <code>upgrade</code></li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt -y upgrade</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>安装<code>XRDP</code><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>（远程连接协议）、<code>Xfce</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>（轻量级桌面环境，安装时会提示选择gdm3或lightdm，我选了gdm3）</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get purge xrdp</span><br><span class="line">sudo apt install -y xrdp</span><br><span class="line">sudo apt install -y xfce4</span><br><span class="line">sudo apt install -y xfce4-goodies</span><br></pre></td></tr></table></figure>
-<ul>
-<li>（<strong>非必须</strong>）更改<code>XRDP</code>的一些配置：增加bpp(bits per pixel)，让远程连接质量更好</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sed -i 's/max_bpp=32/#max_bpp=32\nmax_bpp=128/g' /etc/xrdp/xrdp.ini</span><br><span class="line">sudo sed -i 's/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g' /etc/xrdp/xrdp.ini</span><br><span class="line">echo xfce4-session &gt; ~/.xsession</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>接下来更改<code>XRDP</code>的启动脚本，让它同时启动<code>Xfce</code></li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/xrdp/startwm.sh</span><br></pre></td></tr></table></figure>
-<p>​		把文件的最后几行改成这样：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> -x /etc/X11/Xsession &amp;&amp; <span class="built_in">exec</span> /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">exec</span> /bin/sh /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> xfce</span></span><br><span class="line">startxfce4</span><br></pre></td></tr></table></figure>
-<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/2.png?imageMogr2/auto-orient/thumbnail/!75p/blur/1x0/quality/80" alt="code"></p>
-<ol start="4">
-<li>最后，启动<code>XDRP</code></li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/xrdp start</span><br></pre></td></tr></table></figure>
-<h4 id="开始使用"><a class="header-anchor" href="#开始使用"></a>开始使用</h4>
-<p>使用Windows的远程桌面连接，通过WSL的IP地址<code>:3389</code>，<code>3389</code>为默认端口，可以在配置<code>/etc/xrdp/xrdp.ini</code>中更改。</p>
-<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/3.png" alt="Windows远程桌面连接"></p>
-<p>用WSL的用户名和密码登录进系统</p>
-<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/4.png" alt="登陆界面"></p>
-<p>完成，最后成品：</p>
-<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/5.png?imageMogr2/auto-orient/thumbnail/!50p/blur/1x0/quality/80" alt="Ubuntu桌面"></p>
-<h4 id="后言"><a class="header-anchor" href="#后言"></a>后言</h4>
-<p>​		此文章所使用的方法是通过一些手段来让WSL2支持GUI，所以在使用的过程中略有繁琐和有一些不太完美的地方。相信之后微软推出的WSL2 GUI特性将会很好地支持这方面的使用。想要持续关注这一方面的信息，可以到<a href="https://devblogs.microsoft.com/commandline/" target="_blank" rel="noopener">微软的开发者博客</a>上关注这方面的内容。</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://devblogs.microsoft.com/commandline/the-windows-subsystem-for-linux-build-2020-summary/#wsl-gui" target="_blank" rel="noopener">The Windows Subsystem for Linux BUILD 2020 Summary</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a href="http://www.xrdp.org" target="_blank" rel="noopener">Website of XRDP</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn3" class="footnote-item"><p><a href="https://xfce.org/" target="_blank" rel="noopener">Website of Xfce</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>WSL</tag>
-        <tag>Linux</tag>
-        <tag>指南</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Flowable在SpringBoot环境下自定义身份管理服务</title>
     <url>/2020/07/28/Custom-Identity-Service-in-Flowable-with-Spring-Boot/</url>
     <content><![CDATA[<blockquote>
@@ -146,10 +57,41 @@
         <category>Flowable</category>
       </categories>
       <tags>
-        <tag>指南</tag>
         <tag>Flowable</tag>
         <tag>SpringBoot</tag>
         <tag>Java</tag>
+        <tag>指南</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JVM内存结构</title>
+    <url>/2021/01/29/JVM-Memory-Structure/</url>
+    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/20210722/JVM.svg" alt="JVM.svg"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021年1月12日之后，让Flash继续运行</title>
+    <url>/2021/01/29/Flash-On/</url>
+    <content><![CDATA[<h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
+<p>​		在2021年1月12日之后，Flash将会无法运行，由于影响到了一些年老的系统的运行，所以要让Flash继续工作，经过一系列搜索，在百度贴吧找到了一个<a href="https://tieba.baidu.com/p/7190317501" target="_blank" rel="noopener">帖子</a>，里面的方法可以让Flash继续工作。但是由于需要用WinHex修改文件，对电脑不熟悉的小白同事有一定难度，故有了写一个小工具的想法。</p>
+<h4 id="代码"><a class="header-anchor" href="#代码"></a>代码</h4>
+<h5 id="Github-https-github-com-iamKyun-flash-on"><a class="header-anchor" href="#Github-https-github-com-iamKyun-flash-on"></a>Github : <a href="https://github.com/iamKyun/flash-on" target="_blank" rel="noopener">https://github.com/iamKyun/flash-on</a></h5>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"os/exec"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 此代码只针对windows系统</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取操作系统位数</span></span><br><span class="line">	bit := <span class="number">32</span> &lt;&lt; (^<span class="keyword">uint</span>(<span class="number">0</span>) &gt;&gt; <span class="number">63</span>)</span><br><span class="line">	<span class="keyword">var</span> filePath <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">if</span> bit == <span class="number">64</span> &#123;</span><br><span class="line">		filePath = <span class="string">"C:\\Windows\\SysWOW64\\Macromed\\Flash\\Flash.ocx"</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		filePath = <span class="string">"C:\\Windows\\System32\\Macromed\\Flash\\Flash.ocx"</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"！！！运行前请关闭浏览器！！！"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%d位操作系统\n"</span>, bit)</span><br><span class="line">	fmt.Printf(<span class="string">"读取文件：%s\n"</span>, filePath)</span><br><span class="line">	content, err := ioutil.ReadFile(filePath)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"读取文件失败，请检查文件是否存在"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	targetBytes := []<span class="keyword">byte</span>&#123;<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x40</span>, <span class="number">0x46</span>, <span class="number">0x3E</span>, <span class="number">0x6F</span>, <span class="number">0x77</span>, <span class="number">0x42</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"开始查找目标代码..."</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Contains(content, targetBytes) &#123;</span><br><span class="line">		fmt.Println(<span class="string">"开始尝试修改..."</span>)</span><br><span class="line">		fmt.Println(<span class="string">"获取文件权限..."</span>)</span><br><span class="line">		c := exec.Command(<span class="string">"cmd"</span>, <span class="string">"/C"</span>, <span class="string">"TAKEOWN"</span>, <span class="string">"/F"</span>, filePath, <span class="string">"/a"</span>)</span><br><span class="line">		<span class="keyword">if</span> err := c.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改文件权限失败，请用管理员权限运行！"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		c2 := exec.Command(<span class="string">"cmd"</span>, <span class="string">"/C"</span>, <span class="string">"ICACLS"</span>, filePath, <span class="string">"/grant"</span>, <span class="string">"Administrators:F"</span>)</span><br><span class="line">		<span class="keyword">if</span> err := c2.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改文件权限失败，请用管理员权限运行！"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		targetIndex := bytes.Index(content, targetBytes)</span><br><span class="line">		modifyIndex := targetIndex + <span class="number">7</span></span><br><span class="line">		content[modifyIndex] = <span class="number">0x72</span></span><br><span class="line">		err := ioutil.WriteFile(filePath, content, os.ModePerm)</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改成功，flash已被激活"</span>)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"修改失败，原因："</span>)</span><br><span class="line">			fmt.Println(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"找不到目标代码，修改失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Print(<span class="string">"\n按enter键退出..."</span>)</span><br><span class="line">	fmt.Scanln()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>tools</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>Flash</tag>
+        <tag>Golang</tag>
       </tags>
   </entry>
   <entry>
@@ -271,6 +213,77 @@
         <tag>streaming media</tag>
         <tag>流媒体</tag>
         <tag>音视频开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Windows 10 WSL2中使用图形界面（GUI）</title>
+    <url>/2020/07/25/WSL2-Ubuntu-GUI/</url>
+    <content><![CDATA[<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/1.jpg?imageMogr2/auto-orient/thumbnail/x256/blur/1x0/quality/80" alt="WSL"></p>
+<h4 id="前言"><a class="header-anchor" href="#前言"></a>前言</h4>
+<p>​		微软正在计划让WSL2支持基于RDP的GUI<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，虽然这一特性目前还不可用，但我们还是能通过别的一些手段来达到目的。</p>
+<h4 id="准备环境"><a class="header-anchor" href="#准备环境"></a>准备环境</h4>
+<ul>
+<li>
+<p>Windows 10 （版本：2004）</p>
+</li>
+<li>
+<p>WSL2（Ubuntu 20.04 LTS）（<a href="https://docs.microsoft.com/zh-cn/windows/wsl" target="_blank" rel="noopener">如何安装WSL2?</a>）</p>
+</li>
+</ul>
+<h4 id="安装工具"><a class="header-anchor" href="#安装工具"></a>安装工具</h4>
+<ol>
+<li>先把<code>apt</code> <code>update</code> &amp; <code>upgrade</code></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt -y upgrade</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>安装<code>XRDP</code><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>（远程连接协议）、<code>Xfce</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>（轻量级桌面环境，安装时会提示选择gdm3或lightdm，我选了gdm3）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get purge xrdp</span><br><span class="line">sudo apt install -y xrdp</span><br><span class="line">sudo apt install -y xfce4</span><br><span class="line">sudo apt install -y xfce4-goodies</span><br></pre></td></tr></table></figure>
+<ul>
+<li>（<strong>非必须</strong>）更改<code>XRDP</code>的一些配置：增加bpp(bits per pixel)，让远程连接质量更好</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sed -i 's/max_bpp=32/#max_bpp=32\nmax_bpp=128/g' /etc/xrdp/xrdp.ini</span><br><span class="line">sudo sed -i 's/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g' /etc/xrdp/xrdp.ini</span><br><span class="line">echo xfce4-session &gt; ~/.xsession</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>接下来更改<code>XRDP</code>的启动脚本，让它同时启动<code>Xfce</code></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/xrdp/startwm.sh</span><br></pre></td></tr></table></figure>
+<p>​		把文件的最后几行改成这样：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span> -x /etc/X11/Xsession &amp;&amp; <span class="built_in">exec</span> /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">exec</span> /bin/sh /etc/X11/Xsession</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> xfce</span></span><br><span class="line">startxfce4</span><br></pre></td></tr></table></figure>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/2.png?imageMogr2/auto-orient/thumbnail/!75p/blur/1x0/quality/80" alt="code"></p>
+<ol start="4">
+<li>最后，启动<code>XDRP</code></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/xrdp start</span><br></pre></td></tr></table></figure>
+<h4 id="开始使用"><a class="header-anchor" href="#开始使用"></a>开始使用</h4>
+<p>使用Windows的远程桌面连接，通过WSL的IP地址<code>:3389</code>，<code>3389</code>为默认端口，可以在配置<code>/etc/xrdp/xrdp.ini</code>中更改。</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/3.png" alt="Windows远程桌面连接"></p>
+<p>用WSL的用户名和密码登录进系统</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/4.png" alt="登陆界面"></p>
+<p>完成，最后成品：</p>
+<p><img src="https://qiniucdn.iamkyun.com/posts/WSL2-Ubuntu-GUI/5.png?imageMogr2/auto-orient/thumbnail/!50p/blur/1x0/quality/80" alt="Ubuntu桌面"></p>
+<h4 id="后言"><a class="header-anchor" href="#后言"></a>后言</h4>
+<p>​		此文章所使用的方法是通过一些手段来让WSL2支持GUI，所以在使用的过程中略有繁琐和有一些不太完美的地方。相信之后微软推出的WSL2 GUI特性将会很好地支持这方面的使用。想要持续关注这一方面的信息，可以到<a href="https://devblogs.microsoft.com/commandline/" target="_blank" rel="noopener">微软的开发者博客</a>上关注这方面的内容。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://devblogs.microsoft.com/commandline/the-windows-subsystem-for-linux-build-2020-summary/#wsl-gui" target="_blank" rel="noopener">The Windows Subsystem for Linux BUILD 2020 Summary</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="http://www.xrdp.org" target="_blank" rel="noopener">Website of XRDP</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://xfce.org/" target="_blank" rel="noopener">Website of Xfce</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>指南</tag>
+        <tag>Windows</tag>
+        <tag>WSL</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
 </search>
